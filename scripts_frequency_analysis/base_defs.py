@@ -2,11 +2,6 @@
 
 """"""
 
-# Author: Bedarev Nickolay
-# Mail: n.bedarev@lcgroup.su
-# Limeteam slack: nikkollaii
-# Date: 07.10.2018
-
 
 from gensim.models.phrases import Phrases
 

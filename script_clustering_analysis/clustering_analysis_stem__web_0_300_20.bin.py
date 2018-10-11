@@ -61,7 +61,7 @@ def get_word_with_correct_tag(word_and_tag):
         print(sp)
     return "_".join((sp[0], cotags[str(sp[1])]))
 
-vectors = [dict(vector=np.mean([w2v_model.get_vector(word) for word in words if word in w2v_model.vocab], axis=0), number=number) for number, words in enumerate([[get_word_with_correct_tag(word) for word in sentence.split()] for sentence in sentences])]
+vectors = [dict(vector=np.mean([w2v_model.get_vector(word) for word in words if word in w2v_model.vocab], axis=0), number=number) for number, words in enumerate([[get_word_with_correct_tag(word) for word in sentence] for sentence in sentences])]
 
 clusters = []
 

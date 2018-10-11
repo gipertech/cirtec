@@ -82,8 +82,7 @@ while df_vectors.shape[0] > 10000:
         counter += 1
         print('shape of new cluster: {:4}, counter: {}, dataset:{}'.format(cluster.shape[0], counter, df_vectors.shape[0]))
         with open("../resulting_data/clustering_analysis_stem__web_0_300_20.bin/{}.csv".format(counter), "w") as f:
-            f.writelines(("{}\n".format(sen) for sen in (" ".join([word.split("_")[0] for word in sentences[number].split()]) for number in cluster.number)))
-        break
+            f.writelines(("{}\n".format(sen) for sen in (" ".join([word.split("_")[0] for word in sentences[number]]) for number in cluster.number)))
     else:
         # print("drop: {}".format(cluster.shape[0]))
         pass

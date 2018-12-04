@@ -55,7 +55,7 @@ def load_file(filename, normalize=True):
             "name": sentence[0],
             "id": " ".join([sentence[0], sentence[1], sentence[2], sentence[3]]),
             "sentence": sentence[4],
-            "words_normal_form": sentence[4].split()
+            "words_normal_form": [word.split("_")[0] for word in sentence[4].split()]
         } for sentence in sentences]
     del sentences
     return [line for line in list_sentences if len(line["words_normal_form"]) > 7]

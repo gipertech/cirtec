@@ -37,9 +37,10 @@ def load_file(filename, normalize=True):
         data = f.read()
     text = data.decode('utf-8')  # a `str`; this step can't be used if data is binary
     del data
+    sentences = [sentence.split(" ", 4) for sentence in text.split("\n") if sentence and get_average_len_words(sentence) > 5]
+    sentences = [sentence for sentence in sentences if len(sentence) == 5]
     sentences = [(sentence[0], sentence[1], sentence[2], sentence[3], sentence[4].replace("\xad ", "").lower())
-                 for sentence in (sentence.split(" ", 4) for sentence in text.split("\n") if
-                                  sentence and get_average_len_words(sentence) > 5)]
+                 for sentence in sentences]
     del text
     print("len_sentences: {}".format(len(sentences)))
     if normalize:
@@ -55,7 +56,7 @@ def load_file(filename, normalize=True):
             "name": sentence[0],
             "id": " ".join([sentence[0], sentence[1], sentence[2], sentence[3]]),
             "sentence": sentence[4],
-            "words_normal_form": [word.split("_")[0] for word in sentence[4].split()]
+            "words_normal_form": [word for word in sentence[4].split()]
         } for sentence in sentences]
     del sentences
     return [line for line in list_sentences if len(line["words_normal_form"]) > 7]

@@ -32,7 +32,7 @@ def get_word_with_correct_tag(word):
     return pars_res.normal_form
 
 
-def load_file(filename):
+def load_file(filename, normalize=True):
     with open(filename, 'rb') as f:
         data = f.read()
     text = data.decode('utf-8')  # a `str`; this step can't be used if data is binary
@@ -42,13 +42,21 @@ def load_file(filename):
                                   sentence and get_average_len_words(sentence) > 5)]
     del text
     print("len_sentences: {}".format(len(sentences)))
-    list_sentences = [{
-        "name": sentence[0],
-        "id": " ".join([sentence[0], sentence[1], sentence[2], sentence[3]]),
-        "sentence": sentence[4],
-        "words_normal_form": [get_word_with_correct_tag(word) for word in regex.sub(' ', sentence[4]).split() if
-                              word not in ["й", "ч", "р"]],
-    } for sentence in sentences]
+    if normalize:
+        list_sentences = [{
+            "name": sentence[0],
+            "id": " ".join([sentence[0], sentence[1], sentence[2], sentence[3]]),
+            "sentence": sentence[4],
+            "words_normal_form": [get_word_with_correct_tag(word) for word in regex.sub(' ', sentence[4]).split() if
+                                  word not in ["й", "ч", "р"]],
+        } for sentence in sentences]
+    else:
+        list_sentences = [{
+            "name": sentence[0],
+            "id": " ".join([sentence[0], sentence[1], sentence[2], sentence[3]]),
+            "sentence": sentence[4],
+            "words_normal_form": sentence[4].split()
+        } for sentence in sentences]
     del sentences
     return [line for line in list_sentences if len(line["words_normal_form"]) > 7]
 
@@ -93,6 +101,8 @@ def get_average_value_in_clusters(lines):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="""""")
 
+    parser.add_argument('--no-normalize', dest='normalize', action='store_false')
+    parser.set_defaults(normalize=True)
     parser.add_argument('--in-filename', type=str, required=True,
                         help="Path to the input file")
     parser.add_argument('--out-filename', type=str, required=True,
@@ -106,9 +116,10 @@ if __name__ == "__main__":
     IN_FILENAME = start_args.in_filename
     MODEL = start_args.model
     OUT_FILENAME = start_args.out_filename
+    NORMALIZE = start_args.normalize
 
     model = load_model(MODEL)
-    list_sentences = load_file(IN_FILENAME)
+    list_sentences = load_file(IN_FILENAME, NORMALIZE)
 
     for line in list_sentences:
         line["words_averaging"] = get_word_averaging(line["words_normal_form"], model)

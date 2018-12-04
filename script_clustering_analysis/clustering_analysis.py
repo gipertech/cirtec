@@ -122,6 +122,14 @@ if __name__ == "__main__":
                 [line["words_averaging"] for line in lines])):
             pair[0]["cluster_id"] = pair[1]
 
+    len_ids = []
+    for name in all_names:
+        lines = [line for line in list_sentences if line["name"] == name]
+        cluster_id = set([line["cluster_id"] for line in lines])
+        len_ids.append(len(cluster_id))
+    print(f"average: {sum(len_ids) / len(len_ids)}")
+    print(f"Max len: {max(len_ids)}")
+
     res_dict = dict()
 
     for name in all_names:
